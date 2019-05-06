@@ -1,0 +1,7 @@
+apiVersion: "engineerd.dev/v1alpha1"
+kind: Example
+metadata:
+  name: my-cr-example2
+spec:
+  exampleType: "controller"
+  programmingLanguage: "csharp"
