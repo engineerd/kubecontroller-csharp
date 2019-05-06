@@ -20,15 +20,14 @@ namespace Engineerd.KubeController.Sample
                 Namespace = "kubecontroller"
             };
 
-            var controller = new Controller<ExampleCRD>(new Kubernetes(KubernetesClientConfiguration.BuildConfigFromConfigFile()), crd, Handle);
+            var controller = new Controller<ExampleCRD>(
+                new Kubernetes(KubernetesClientConfiguration.BuildConfigFromConfigFile()),
+                crd,
+                (WatchEventType eventType, ExampleCRD example) =>
+                    Console.WriteLine("Event type: {0} for {1}", eventType, example.Metadata.Name));
+
             var cts = new CancellationTokenSource();
             await controller.StartAsync(cts.Token).ConfigureAwait(false);
-        }
-
-        public static void Handle(WatchEventType eventType, ExampleCRD example)
-        {
-            Console.WriteLine("Event: {0} \nName: {1}\nProgramming Language: {2}\nType: {3}\n\n",
-                                eventType, example.Metadata.Name, example.Spec.ProgrammingLanguage, example.Spec.ExampleType);
         }
     }
 }
